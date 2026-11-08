@@ -42,7 +42,80 @@ button.secondary{background:linear-gradient(180deg,#312678,#241b60)}
 .preview-card{background:linear-gradient(145deg,#281a62,#160f44)}
 @media(max-width:620px){.token{width:14px;height:16px;font-size:9px}.team-badge{width:28px;height:31px;font-size:15px}.centerboard{margin:8px;padding:12px}}
 </style>
-</head><body><div class="wrap"><header class="top"><div><div class="sub">Інтерактивна юридична стратегія • демоверсія</div><div class="brand">⚖ ГОСПОДАРСЬКА <span>МОНОПОЛІЯ</span></div></div><div class="pill" id="roomLabel">Навчальна гра • ГПК України</div></header><div id="app"></div><footer class="foot">Демонстраційний режим на одному пристрої • Умовні бали не є судовими платежами • Перед заняттям звіряйте завдання з актуальною редакцією ГПК</footer></div><script>
+
+<style id="refined-3d-theme">
+/* Спокійна палітра: слонова кістка, теплий синій, латунь */
+:root{--bg:#e8edf1;--panel:#f9fbfb;--panel2:#edf3f5;--gold:#c69445;--white:#263d50;--muted:#607889;--line:#c5d6df;--good:#208b78}
+body{color:#263e52;background:radial-gradient(ellipse at 15% 0%,#fff9eb 0%,#eef3f5 43%,#dce8ed 100%);background-attachment:fixed}
+.top{border-bottom:1px solid #c9d6de}
+.brand,.intro h1{color:#263e52}
+.brand span{color:#a97328}
+.sub,.intro p{color:#5b7182}
+.panel{background:linear-gradient(150deg,#fffefa,#f2f6f7);border:1px solid #d0dce1;box-shadow:0 10px 30px #36556917,inset 0 1px #fff;color:#2b4054}
+button{color:#f9fcfd;background:linear-gradient(160deg,#55758d,#385b73);border:1px solid #54748b;box-shadow:0 5px 11px #34506625}
+button.secondary{color:#3b5b6e;background:linear-gradient(#fff,#edf2f3);border:1px solid #c8d7de}
+button.primary{background:linear-gradient(115deg,#ffe5a2,#f5bd67 55%,#ec9e53);color:#543a18;border:1px solid #efb66d;box-shadow:0 8px 18px #d49a4b45, inset 0 1px #fff8}
+button.primary:hover{box-shadow:0 10px 24px #d49a4b60}
+input,select{background:#fffdf8;color:#2d4356;border:1px solid #c5d5dc}
+label,.hint,.centerboard .hint{color:#60768a}
+.pill{background:linear-gradient(#e8f1f4,#d9e7eb);color:#50677b;border:1px solid #c7dbe2}
+.team{background:linear-gradient(145deg,#fffdf8,#e9f0f2);border:1px solid #d0dde2;box-shadow:0 6px 15px #435d6e17}
+.team.active{outline:2px solid #c69445;box-shadow:0 0 0 4px #c6944524}
+.score{color:#9c6c33;text-shadow:none}
+.question .option{background:linear-gradient(#fafdfe,#eaf2f5);border:1px solid #cadbe0;color:#2e4557}
+.question .option.picked{background:#fbecd0;border-color:#c69445}
+.question .option.right{background:#e1f7ee;border-color:#49aa86}
+.question .option.wrong{background:#fae7e5;border-color:#d9958d}
+.notice,.callout{background:linear-gradient(#ecf8f5,#deeee9);color:#2c5260;border:1px solid #b4d2ca}
+.log{color:#537084;border-bottom-color:#dbe5e9}
+.joinlink{color:#9e722f}
+.source-links a{color:#845a1e;border-color:#d7c8a7}
+.preview-card{background:linear-gradient(145deg,#fffdf7,#edf4f6)}
+.board{perspective:1100px;isolation:isolate;border:6px solid #e8c992;border-radius:25px;background:linear-gradient(135deg,#f6e9d2,#fff9eb);box-shadow:0 16px 0 #bd9d68,0 21px 0 2px #9b876b,0 36px 60px #4561712e,0 0 0 8px #fff9ed}
+.board::before{background:radial-gradient(circle at 50% 50%,#fff7e680,#fff0d920 60%,transparent);pointer-events:none}
+.cell{--accent:#7fa5b0;isolation:isolate;transform-style:preserve-3d;overflow:visible;z-index:1;border:1px solid #e0d8c8;border-radius:6px;background:linear-gradient(165deg,#fffefe 0%,#fffbf1 60%,#ebede6 100%);box-shadow:inset 2px 2px 0 #fff, inset -2px -2px 0 #d0d9d6,0 3px 0 #b9c3c0,0 5px 6px #4f637a38;transition:transform .2s ease,box-shadow .2s ease;min-height:0;padding:3px}
+.cell .strip{position:relative;z-index:1;height:10px;margin:-3px -3px 2px;background:linear-gradient(95deg,color-mix(in srgb,var(--accent),white 42%),var(--accent) 50%,color-mix(in srgb,var(--accent),black 15%));border-radius:5px 5px 2px 2px;box-shadow:0 2px 0 #0002}
+.cell::after{content:"§";position:absolute;left:50%;top:49%;transform:translate(-50%,-50%) rotate(-6deg);font-family:Georgia,serif;font-size:clamp(11px,1.8vw,27px);font-weight:800;line-height:1;color:color-mix(in srgb,var(--accent),#526a72 25%);opacity:.3;z-index:0;pointer-events:none;filter:drop-shadow(1px 2px 0 #fff)}
+.cell small{position:relative;z-index:2;color:#243f54;font-size:clamp(6px,.7vw,10px);line-height:1.08;font-weight:800;text-shadow:0 1px #fff;background:#ffffffaa;border-radius:3px;padding:1px;overflow-wrap:anywhere}
+.cell .number{z-index:2;color:#607180;opacity:.8}
+.cell:hover{transform:translateY(-5px) rotateX(3deg);outline:2px solid #d5a457;box-shadow:inset 2px 2px #fff,0 8px 0 #aab9bb,0 12px 16px #425c7750;z-index:5}
+.cell .tokens{position:relative;z-index:4;gap:3px;min-height:22px;overflow:visible}
+.centerboard{z-index:0;margin:13px;background:radial-gradient(circle at center,#fffefb,#edf4f3 60%,#dae6e6 100%);border:2px solid #d2c5a9;border-radius:23px;box-shadow:inset 0 0 0 6px #fff7ec,0 10px 18px #455b7024;color:#28465b}
+.centerboard::before{border:2px dashed #d7b98475}
+.centerboard h2{color:#476779;text-shadow:0 2px #fff}
+.centerboard .scale{color:#b28a44;filter:drop-shadow(0 3px 2px #92733b55)}
+.centerboard p{color:#74848d}
+.token,.team-badge{--team:#76acd8;clip-path:none;display:inline-flex;align-items:center;justify-content:center;position:relative;overflow:visible;flex-shrink:0;vertical-align:middle;color:#1e3d53;background:linear-gradient(135deg,#ffffff 0%,color-mix(in srgb,var(--team),white 63%) 36%,var(--team) 85%,color-mix(in srgb,var(--team),black 30%) 100%);border:1px solid color-mix(in srgb,var(--team),black 30%);border-radius:45% 45% 33% 33%;box-shadow:inset 2px 2px 2px #fff9,inset -3px -3px 3px #0003,2px 4px 4px #304a5652;transform:rotateX(-7deg)}
+.token{width:21px;height:24px;font-size:12px;padding:0}
+.token .token-symbol,.team-badge .token-symbol{position:relative;z-index:2;display:block;filter:drop-shadow(1px 2px 0 #ffffff90) drop-shadow(0 1px 1px #122d3e5c)}
+.token::after,.team-badge::after{content:"";position:absolute;z-index:-1;left:3%;right:3%;bottom:-5px;height:7px;border-radius:50%;background:linear-gradient(90deg,#657a83,#eaf0e7 50%,#637f88);border:1px solid #738a91;box-shadow:0 4px 5px #0005}
+.token::before,.team-badge::before{content:"";position:absolute;z-index:1;top:2px;left:14%;width:27%;height:39%;background:linear-gradient(#fff9,#ffffff0a);border-radius:50%;transform:rotate(-20deg)}
+.team-badge{width:35px;height:39px;font-size:19px}
+.team-badge::after{bottom:-6px;height:9px}
+.cell[data-cell="0"]::after,.cell[data-cell="39"]::after{content:"⚑"}
+.cell[data-cell="1"]::after,.cell[data-cell="10"]::after{content:"⚖"}
+.cell[data-cell="2"]::after,.cell[data-cell="20"]::after,.cell[data-cell="21"]::after,.cell[data-cell="22"]::after,.cell[data-cell="23"]::after{content:"✎"}
+.cell[data-cell="4"]::after,.cell[data-cell="17"]::after,.cell[data-cell="31"]::after{content:"₴"}
+.cell[data-cell="5"]::after,.cell[data-cell="6"]::after,.cell[data-cell="15"]::after{content:"◈"}
+.cell[data-cell="7"]::after,.cell[data-cell="19"]::after{content:"◷"}
+.cell[data-cell="8"]::after,.cell[data-cell="9"]::after,.cell[data-cell="18"]::after,.cell[data-cell="29"]::after{content:"★"}
+.cell[data-cell="11"]::after{content:"⌘"}
+.cell[data-cell="12"]::after{content:"!"}
+.cell[data-cell="13"]::after,.cell[data-cell="27"]::after{content:"▤"}
+.cell[data-cell="14"]::after{content:"♙"}
+.cell[data-cell="16"]::after{content:"⚗"}
+.cell[data-cell="24"]::after{content:"◇"}
+.cell[data-cell="25"]::after,.cell[data-cell="26"]::after{content:"🤝";font-family:system-ui}
+.cell[data-cell="28"]::after{content:"↻"}
+.cell[data-cell="30"]::after,.cell[data-cell="32"]::after{content:"⚖"}
+.cell[data-cell="33"]::after{content:"↗"}
+.cell[data-cell="34"]::after{content:"⇧"}
+.cell[data-cell="35"]::after{content:"↺"}
+.cell[data-cell="36"]::after,.cell[data-cell="37"]::after{content:"⚒"}
+.cell[data-cell="38"]::after{content:"✉"}
+@media(max-width:980px){.cell small{font-size:clamp(6px,1vw,10px)}.cell::after{font-size:clamp(10px,2.7vw,22px)}}
+@media(max-width:620px){.board{border-width:3px;border-radius:12px;box-shadow:0 8px 0 #bd9d68,0 18px 28px #4561712e}.cell{padding:1px;border-radius:3px}.cell .strip{height:5px;margin:-1px -1px 1px}.cell small{font-size:5px;padding:0}.cell::after{font-size:11px;opacity:.25}.cell .tokens{min-height:13px;gap:1px}.token{width:13px;height:15px;font-size:8px}.token::after{height:4px;bottom:-3px}.team-badge{width:28px;height:32px;font-size:16px}.centerboard{margin:7px}.centerboard h2{font-size:18px}}
+</style></head><body><div class="wrap"><header class="top"><div><div class="sub">Інтерактивна юридична стратегія • демоверсія</div><div class="brand">⚖ ГОСПОДАРСЬКА <span>МОНОПОЛІЯ</span></div></div><div class="pill" id="roomLabel">Навчальна гра • ГПК України</div></header><div id="app"></div><footer class="foot">Демонстраційний режим на одному пристрої • Умовні бали не є судовими платежами • Перед заняттям звіряйте завдання з актуальною редакцією ГПК</footer></div><script>
 const $=s=>document.querySelector(s), app=$('#app');let room=new URLSearchParams(location.search).get('room')?.toUpperCase()||'',token='',state=null,err='',joined=false,loading=false;const storageKey=r=>'game_v2_'+r;let lastVote='';
 const e=s=>String(s??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 
