@@ -553,48 +553,75 @@ const SOURCE_CATALOG=[
 {name:"ВС: електронні докази, 12.03.2026",url:"https://court.gov.ua/storage/portal/supreme/prezent2026/Elektronni_dokazy.pdf",period:"Презентація 2026; старі висновки лише за чинності"}
 ];
 
+const SIMILAR_TOPIC_TILES=[[39,1,10,2],[10,39,23,24],[3,20,21,23],[20,21,2,13],[17,29,31,30],[15,14,16,18],[5,15,16,18],[33,34,35,10],[12,25,19,28],[26,25,29,30],[1,33,22,39],[22,5,15,21],[28,19,25,13],[23,2,3,20],[15,5,16,18],[5,16,18,14],[15,5,18,14],[4,29,31,30],[16,5,15,14],[28,12,7,27],[3,21,23,13],[20,3,2,22],[11,21,5,2],[13,2,20,24],[23,26,1,19],[26,12,8,28],[25,9,23,24],[28,19,13,16],[27,19,12,13],[17,4,31,30],[31,32,33,34],[30,17,29,32],[30,31,33,35],[34,10,35,7],[33,35,7,36],[34,33,32,37],[37,38,35,34],[36,38,34,19],[37,36,30,34],[0,1,10,33]];
+function legalCaseRecords(){
+ const advanced=ADVANCED_CASES.concat(EXTENDED_CASES,TOPIC_CASES,EXTRA_CASES,FINAL_CASES);
+ return advanced.map((d,i)=>({id:'adv-'+i,cell:d[0],text:d[1],options:d[2],answer:d[3],explanation:d[4],article:d[5],origin:d[6],year:d[7],caseNumber:d[8],source:/^https?:/.test(d[6])?d[6]:'https://reyestr.court.gov.ua/Review/'+d[6]}));
+}
+function rememberQuestionSeen(){
+ if(!state)return;
+ state.questionHistoryTexts??=[];
+ state.lastQuestionByCell??={};
+ if(state.question?.text&&state.teams?.[state.turn]){
+  const previousCell=state.teams[state.turn].position;
+  const previousText=state.question.text;
+  state.lastQuestionByCell[previousCell]=previousText;
+  if(!state.questionHistoryTexts.includes(previousText))state.questionHistoryTexts.push(previousText);
+ }
+}
 function nextScenario(cell){
  state.questionVisits??=Array(40).fill(0);
+ state.questionHistoryTexts??=[];
+ state.lastQuestionByCell??={};
  state.questionCycle??=Array.from({length:40},()=>[]);
- const count=state.questionVisits[cell]||0;
- state.questionVisits[cell]=count+1;
- const candidates=ADVANCED_CASES.concat(EXTENDED_CASES,TOPIC_CASES,EXTRA_CASES,FINAL_CASES).map((v,i)=>({v,i})).filter(({v})=>v[0]===cell&&(![4,17,29,31].includes(cell)||v[7]==null||(v[7]>=2022&&v[7]<=2024)));
- const hasBase=DATA_Q[cell]?.length>=6;
- const pool=candidates.map(({i})=>"adv-"+i).concat(!candidates.length&&hasBase?["base-"+cell]:[]);
- const visited=state.questionCycle[cell]||[];
- const unused=pool.filter(id=>!visited.includes(id));
- if(!unused.length){state.questionCycle[cell]=[]}
- const available=unused.length?unused:pool;
- // Кожне нове питання клітинки використовується до вичерпання банку, далі нове коло без повтору поспіль.
- const pick=available[Math.floor(Math.random()*available.length)];
- state.questionCycle[cell].push(pick);
- let text,options,answer,explanation,article,source,origin,year,caseNumber;
- if(pick.startsWith("adv-")){
-  const d=ADVANCED_CASES.concat(EXTENDED_CASES,TOPIC_CASES,EXTRA_CASES,FINAL_CASES)[Number(pick.slice(4))];
-  text=d[1];options=d[2];answer=d[3];explanation=d[4];article=d[5];origin=d[6];year=d[7];caseNumber=d[8];
-  source=/^https?:/.test(origin)?origin:"https://reyestr.court.gov.ua/Review/"+origin;
- }else{
-  const d=DATA_Q[cell];[text,options,answer,explanation,article,source]=d;
-  origin="Огляд КГС ВС 2022–2026";year=null;caseNumber="Огляд практики";
+ const count=state.questionVisits[cell]||0;state.questionVisits[cell]=count+1;
+ const all=legalCaseRecords();
+ const allowed=d=>![4,17,29,31].includes(d.cell)||d.year==null||(d.year>=2022&&d.year<=2024);
+ const bank=all.filter(allowed);
+ const baseQuestion=(tile)=>{const b=DATA_Q[tile];return b&&b.length>=6?{id:'base-'+tile,cell:tile,text:b[0],options:b[1],answer:b[2],explanation:b[3],article:b[4],source:b[5],year:null,caseNumber:'Навчальна ситуація за ГПК'}:null};
+ // Питання без дублів серед різних команд, навіть коли на клітинці спочатку було лише одне завдання.
+ const primary=bank.filter(d=>d.cell===cell);
+ if(!primary.length){const base=baseQuestion(cell);if(base)primary.push(base)}
+ const companion=(SIMILAR_TOPIC_TILES[cell]||[]).flatMap(tile=>{const group=bank.filter(d=>d.cell===tile);return group.length?group:[baseQuestion(tile)].filter(Boolean)});
+ const pool=[...primary,...companion].filter((q,i,a)=>a.findIndex(x=>x.text===q.text)===i);
+ const history=state.questionHistoryTexts;
+ const last=state.lastQuestionByCell[cell];
+ let available=pool.filter(q=>!history.includes(q.text)&&q.text!==last);
+ if(!available.length){
+  // Перш ніж повторити питання на цій клітинці, шукаємо невикористаний казус у всьому банку.
+  available=bank.filter(q=>!history.includes(q.text)&&q.text!==last);
  }
- const indices=[0,1,2,3];for(let j=3;j>0;j--){let k=Math.floor(Math.random()*(j+1));[indices[j],indices[k]]=[indices[k],indices[j]]}
- return {text,options:indices.map(i=>options[i]),answer:indices.indexOf(answer),explanation,article,source,origin,year,caseNumber,variant:count+1};
+ if(!available.length){
+  available=pool.filter(q=>q.text!==last);
+ }
+ if(!available.length)available=pool;
+ if(!available.length)throw Error('Для цієї клітинки немає жодного процесуального завдання');
+ // Перевага: нове питання точної теми. Після нього інша тема тієї самої процесуальної групи.
+ const own=available.filter(q=>q.cell===cell);
+ const selection=own.length?own:available;
+ const picked=selection[Math.floor(Math.random()*selection.length)];
+ history.push(picked.text);
+ state.lastQuestionByCell[cell]=picked.text;
+ state.questionCycle[cell].push(picked.id);
+ const order=[0,1,2,3];
+ for(let j=order.length-1;j>0;j--){const k=Math.floor(Math.random()*(j+1));[order[j],order[k]]=[order[k],order[j]]}
+ return {text:picked.text,options:order.map(i=>picked.options[i]),answer:order.indexOf(picked.answer),explanation:picked.explanation,article:picked.article,source:picked.source,year:picked.year,caseNumber:picked.caseNumber,variant:count+1,caseId:picked.id,topicCell:picked.cell,relatedTopic:picked.cell!==cell};
 }
 
 function explainRules(){return '<div class="rules-inner"><h3>Як працює економіка гри?</h3><p><b>Банк процесуальних ситуацій:</b> 80 нових ситуацій, підготовлених за матеріалами Верховного Суду, та 40 попередніх навчальних питань для тем, які ще не перекриті новим банком. У межах партії питання однієї клітинки не повторюються, доки доступні її варіанти. Для судових витрат використовуються рішення 2022–2024 років.</p><p><b>Бали</b> це незмінювані очки за юридичні знання. За правильну відповідь команда отримує <b>250 балів</b>, а за кожну придбану практику додатково 25 балів (не більше 75). <b>Фінальна перемога</b> визначається сумою балів компетентності та 50% залишку ПК і 50% вартості придбаних практик.</p><p><b>ПК (процесуальний капітал)</b> це умовна ігрова валюта, яку можна витрачати. На старті 500 ПК, за правильну відповідь +100 ПК, за повне коло +200 ПК. Вільну практику можна купити вже з першого ходу після правильної відповіді, якщо капіталу достатньо. Ціни становлять від 250 до 450 ПК.</p><p><b>Зелені поля</b> дають шанс заробити додаткову винагороду за правильне рішення. <b>Червоні поля</b> створюють ризик саме для команди, яка на них потрапила. <b>Процесуальний виклик</b> потребує правової відповіді; помилка коштує до 100 ПК. На клітинці «Процесуальна дуель» активна команда обирає суперника, який заявляє заперечення. Після цього активна команда захищає свою правову позицію. Картку процесуального виклику можна отримати за правильну відповідь на «Шансі» або «Лотереї», зберегти й потім використати проти іншої команди на звичайному полі. На червоному полі «Процесуальний виклик» перевірку проходить саме команда, яка на нього потрапила.</p><p><b>Чужа практика:</b> якщо команда помиляється на клітинці, яка належить супернику, вона сплачує йому до 100 ПК; правильна відповідь звільняє від платежу.</p></div>'}
 
 function persist(){if(state)localStorage.setItem('mono_demo_room_v2',JSON.stringify(state))}
-function makeState(){let teamCount=4;return {room:'DEMO26',phase:'lobby',host:true,players:Array.from({length:8},(_,i)=>({id:'sample'+i,name:'Учасник '+(i+1),team:null,connected:true})),teams:Array.from({length:teamCount},(_,i)=>({name:DATA_NAMES[i],color:DATA_COLORS[i],symbol:DATA_SYMBOLS[i],position:0,points:0,assets:0,capital:500,knowledge:0,cards:1,laps:0,skip:0,purchased:[]})),teamCount,ownership:{},questionVisits:Array(40).fill(0),questionCycle:Array.from({length:40},()=>[]),notice:'',challenge:null,turn:0,round:0,dice:null,spaces:DATA_SPACES,question:null,logs:['Демонстраційну гру створено. Вісім віртуальних учасників готові.'],settings:{mode:'random',maxRounds:12}}}
+function makeState(){let teamCount=4;return {room:'DEMO26',phase:'lobby',host:true,players:Array.from({length:8},(_,i)=>({id:'sample'+i,name:'Учасник '+(i+1),team:null,connected:true})),teams:Array.from({length:teamCount},(_,i)=>({name:DATA_NAMES[i],color:DATA_COLORS[i],symbol:DATA_SYMBOLS[i],position:0,points:0,assets:0,capital:500,knowledge:0,cards:1,laps:0,skip:0,purchased:[]})),teamCount,ownership:{},questionVisits:Array(40).fill(0),questionCycle:Array.from({length:40},()=>[]),questionHistoryTexts:[],lastQuestionByCell:{},notice:'',challenge:null,turn:0,round:0,dice:null,spaces:DATA_SPACES,question:null,logs:['Демонстраційну гру створено. Вісім віртуальних учасників готові.'],settings:{mode:'random',maxRounds:12}}}
 async function api(op,other={}){try{
  if(op==='create'){room='DEMO26';token='demo-host';state=makeState();localStorage.setItem(storageKey(room),token)}
- else if(op==='state'){state=JSON.parse(localStorage.getItem('mono_demo_room_v2')||'null');if(!state)throw Error('Натисніть «Почати демонстраційну гру»');state.host=true;state.teams=(state.teams||[]).map((t,i)=>({...t,name:t.name||DATA_NAMES[i],color:t.color||DATA_COLORS[i],symbol:t.symbol||DATA_SYMBOLS[i],position:t.position??0,points:t.points??0,assets:t.assets??0}));state.questionVisits??=Array(40).fill(0);state.questionCycle??=Array.from({length:40},()=>[])}
+ else if(op==='state'){state=JSON.parse(localStorage.getItem('mono_demo_room_v2')||'null');if(!state)throw Error('Натисніть «Почати демонстраційну гру»');state.host=true;state.teams=(state.teams||[]).map((t,i)=>({...t,name:t.name||DATA_NAMES[i],color:t.color||DATA_COLORS[i],symbol:t.symbol||DATA_SYMBOLS[i],position:t.position??0,points:t.points??0,assets:t.assets??0}));state.questionVisits??=Array(40).fill(0);state.questionCycle??=Array.from({length:40},()=>[]);rememberQuestionSeen()}
  else if(!state){throw Error('Спочатку створіть демогру')}
  else if(op==='buy'){strategy();let t=active(),i=t.position;if(!assetCanBuy())throw Error('Придбати актив зараз не можна');t.capital-=price(i);state.ownership[i]=state.turn;t.purchased=holdings(state.turn);t.assets=t.purchased.length;state.notice='🏛 Практика «'+label(i)+'» придбана за '+price(i)+' ПК. Тепер клітинка позначена кольором команди, а '+price(i)+' ПК враховано у вартості її активів.';state.logs.push(state.notice)}
  else if(op==='challenge'){strategy();let i=Number(other.team);if(state.phase!=='voting'||state.challenge||state.dismissChallenge||i===state.turn||!state.teams[i]?.cards)throw Error('Картка недоступна');state.teams[i].cards--;state.challenge={from:i,valid:false};state.phase='objection';state.logs.push(state.teams[i].name+' застосувала процесуальний виклик')}
  else if(op==='duel_target'){const i=Number(other.team);if(state.phase!=='duel_pick'||i===state.turn||!state.teams[i])throw Error('Неправильний вибір команди');state.challenge={from:i,valid:false,duel:true};state.phase='objection';state.logs.push('Дуель: '+active().name+' проти '+state.teams[i].name)}
  else if(op==='objection'){if(state.phase!=='objection'||!state.challenge)throw Error('Спершу заявіть виклик');state.challenge.valid=Number(other.choice)===objection(active().position)[4];state.phase='voting'}
  else if(op==='dismissChallenge'){state.dismissChallenge=true}
- else if(op==='configure'){let n=Number(other.count)||4;state.teamCount=n;state.teams=Array.from({length:n},(_,i)=>({name:DATA_NAMES[i],color:DATA_COLORS[i],symbol:DATA_SYMBOLS[i],position:0,points:0,assets:0,capital:500,knowledge:0,cards:1,laps:0,skip:0,purchased:[]}));state.players.forEach(p=>p.team=null);state.questionVisits=Array(40).fill(0);state.questionCycle=Array.from({length:40},()=>[]);state.ownership={};state.settings={mode:other.mode||'random',maxRounds:other.maxRounds||12}}
+ else if(op==='configure'){let n=Number(other.count)||4;state.teamCount=n;state.teams=Array.from({length:n},(_,i)=>({name:DATA_NAMES[i],color:DATA_COLORS[i],symbol:DATA_SYMBOLS[i],position:0,points:0,assets:0,capital:500,knowledge:0,cards:1,laps:0,skip:0,purchased:[]}));state.players.forEach(p=>p.team=null);state.questionVisits=Array(40).fill(0);state.questionCycle=Array.from({length:40},()=>[]);state.questionHistoryTexts=[];state.lastQuestionByCell={};state.ownership={};state.settings={mode:other.mode||'random',maxRounds:other.maxRounds||12}}
  else if(op==='assign'){let p=state.players.find(p=>p.id===other.player);if(p)p.team=other.team}
  else if(op==='start'){let slots=state.teams.map((_,i)=>i);state.players.forEach((p,i)=>{if(p.team===null)p.team=slots[i%slots.length]});if(new Set(state.players.map(p=>p.team)).size<2)throw Error('Потрібні хоча б дві команди');strategy();state.phase='roll';state.turn=0;state.logs.push('Гру розпочато!')}
  else if(op==='roll'){
@@ -612,9 +639,9 @@ async function api(op,other={}){try{
  if(idx===19){state.eventType='skip';t.skip=1;eventNote='⌛ Наступний хід команди «'+t.name+'» буде пропущено. За правильну відповідь паузу буде скасовано.'}
  if(eventNote)state.notice+=(state.notice?' • ':'')+eventNote;
  const picked=nextScenario(idx);
- const {text,options,answer,explanation,article,source,variant,year,caseNumber}=picked;
- state.question={text,options,category:label(idx),variant,year,caseNumber,count:0,eligible:state.players.filter(p=>p.team===state.turn).length,answered:false,yourVote:null,answer:null,explanation:null,article:null,votes:null,_correct:answer,_explanation:explanation,_article:article,_source:source,_choice:null};
- state.phase=idx===25?'duel_pick':'voting';state.logs.push(t.name+': '+d1+'+'+d2+', «'+label(idx)+'» (ситуація '+variant+')');
+ const {text,options,answer,explanation,article,source,variant,year,caseNumber,caseId,topicCell,relatedTopic}=picked;
+ state.question={text,options,category:label(idx),variant,year,caseNumber,caseId,topicCell,relatedTopic,count:0,eligible:state.players.filter(p=>p.team===state.turn).length,answered:false,yourVote:null,answer:null,explanation:null,article:null,votes:null,_correct:answer,_explanation:explanation,_article:article,_source:source,_choice:null};
+ state.phase=idx===25?'duel_pick':'voting';state.logs.push(t.name+': '+d1+'+'+d2+', «'+label(idx)+'» (нова ситуація '+variant+', № '+caseId+')');
  }
  else if(op==='vote'){if(state.phase!=='voting')throw Error('Голосування не триває');let q=state.question;q._choice=other.answer;q.count=q.eligible;q.answered=true;q.yourVote=other.answer}
  else if(op==='reveal'){
