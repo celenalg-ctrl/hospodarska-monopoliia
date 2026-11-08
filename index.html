@@ -295,6 +295,87 @@ text-shadow:none!important;cursor:pointer;transition:transform .15s,box-shadow .
 .question .source-links a:focus-visible,.notice .source-links a:focus-visible,.game-sidebar .source-links a:focus-visible{outline:3px solid #ffffff!important;outline-offset:3px}
 .question .source-links a:active,.notice .source-links a:active,.game-sidebar .source-links a:active{transform:translateY(2px);box-shadow:inset 0 1px #fff9,0 2px 0 #8b6425!important}
 @media(max-width:720px){.question .source-links a,.notice .source-links a,.game-sidebar .source-links a{width:100%;font-size:13px!important;min-height:45px}}
+</style><style id="rectangular-game-board-v9">
+/* 40 клітинок, розташованих без перекриття по периметру прямокутної 11×11 сітки. */
+.game-stage .board{position:relative;aspect-ratio:1200 / 790}
+.game-stage .board .rectangular-base{position:absolute;inset:0;z-index:0;width:100%;height:100%;pointer-events:none}
+.game-stage .board .cell{
+ width:8.2%;height:7.55%;
+ transform:translate(-50%,-50%);border:0;border-radius:9px;
+ z-index:5;filter:drop-shadow(1px 4px 1px #0008);
+}
+.game-stage .board .cell::before{
+ clip-path:none;border-radius:8px;inset:1px 0 -5px;
+ background:linear-gradient(170deg,#c99e4a,#684a1c);
+}
+.game-stage .board .cell .tile-top{
+ clip-path:none;border-radius:8px;
+ border:1px solid #f5cf70;
+ box-shadow:inset 2px 2px #fff8,inset -2px -2px #b6975a99,0 0 0 1px #573c1d;
+}
+.game-stage .board .cell .tile-top::before{clip-path:none;border-radius:7px}
+.game-stage .board .cell .tile-contents{inset:6% 3%;gap:1px;justify-content:center}
+.game-stage .board .cell .tile-icon{font-size:clamp(12px,1.4vw,21px);line-height:1.05}
+.game-stage .board .cell small{
+ max-width:95%;font-size:clamp(6px,.67vw,10px);line-height:1.04;
+ hyphens:auto;overflow-wrap:break-word;word-break:normal;
+ text-align:center;
+}
+.game-stage .board .cell .number{font-size:8px;bottom:1%;opacity:.75}
+.game-stage .board .cell .tokens{
+ top:3%;left:50%;transform:translate(-50%,-50%);
+ width:110%;height:35px;justify-content:center;align-items:center;
+ z-index:30;pointer-events:none;gap:1px;flex-wrap:nowrap;
+}
+.game-stage .board .cell .tokens:has(.token:nth-child(3)){top:-6%}
+.game-stage .board .cell:has(.token){z-index:18}
+.game-stage .board .cell:hover,.game-stage .board .cell:focus-visible{
+ transform:translate(-50%,-58%) scale(1.1);z-index:35;
+}
+.game-stage .board .centerboard{
+ position:absolute;top:49%;left:50%;width:37%;height:49%;
+ transform:translate(-50%,-49%);border:0;background:transparent;box-shadow:none;
+}
+.game-stage .board .centerboard h2{font-size:clamp(27px,3.15vw,48px);line-height:.96}
+.game-stage .board .centerboard .crystal-court{height:clamp(55px,7vw,105px);width:clamp(60px,8vw,120px)}
+.game-stage .board .team-hud{width:17%;max-width:none;min-width:0;z-index:8}
+.game-stage .board .team-hud.hud-0{left:16%;top:21%;right:auto;bottom:auto}
+.game-stage .board .team-hud.hud-1{right:16%;top:21%;left:auto;bottom:auto}
+.game-stage .board .team-hud.hud-2{right:16%;bottom:21%;left:auto;top:auto}
+.game-stage .board .team-hud.hud-3{left:16%;bottom:21%;right:auto;top:auto}
+.game-stage .board .team-hud .hud-row{min-width:0}
+.game-stage .board .team-hud .hud-name{font-size:clamp(14px,1.4vw,22px);overflow-wrap:anywhere}
+.game-stage .board .team-hud .hud-meta{font-size:clamp(8px,.7vw,11px)}
+.game-stage .board .stage-action-dock{bottom:16%;left:50%;transform:translateX(-50%);z-index:45}
+.game-stage .board .centerboard .dice-scene{min-height:55px}
+@media(max-width:1050px){
+.game-stage .board .cell small{font-size:clamp(5px,.65vw,8px)}
+.game-stage .board .cell .tile-icon{font-size:clamp(11px,1.2vw,16px)}
+.game-stage .board .team-hud{width:18%}
+.game-stage .board .centerboard h2{font-size:clamp(24px,3vw,39px)}
+.game-stage .board .centerboard .crystal-court{height:65px;width:70px}
+.game-stage .board .team-hud .hud-figure{font-size:20px}
+}
+@media(max-width:720px){
+.game-stage .board .cell{width:8.35%;height:7.6%;border-radius:4px}
+.game-stage .board .cell .tile-top,.game-stage .board .cell::before{border-radius:3px}
+.game-stage .board .cell .tile-contents{inset:2% 1%}
+.game-stage .board .cell .tile-icon{font-size:9px}
+.game-stage .board .cell small{font-size:5px;line-height:1}
+.game-stage .board .cell .number{display:none}
+.game-stage .board .cell .tokens{height:20px}
+.game-stage .board .team-hud{width:19%;padding:2px 3px}
+.game-stage .board .team-hud.hud-0{left:13%;top:20%}
+.game-stage .board .team-hud.hud-1{right:13%;top:20%}
+.game-stage .board .team-hud.hud-2{right:13%;bottom:20%}
+.game-stage .board .team-hud.hud-3{left:13%;bottom:20%}
+.game-stage .board .team-hud .hud-name{font-size:11px}
+.game-stage .board .team-hud .hud-meta{font-size:7px}
+.game-stage .board .centerboard{width:40%;height:43%}
+.game-stage .board .centerboard h2{font-size:clamp(15px,3.4vw,27px)}
+.game-stage .board .centerboard .crystal-court{height:35px;width:40px}
+.game-stage .board .stage-action-dock{bottom:12%}
+}
 </style></head><body><div class="wrap"><header class="top"><div><div class="sub">Інтерактивна юридична стратегія • демоверсія</div><div class="brand">⚖ ГОСПОДАРСЬКА <span>МОНОПОЛІЯ</span></div></div><div class="pill" id="roomLabel">Навчальна гра • ГПК України</div></header><div id="app"></div><footer class="foot">Демонстраційний режим на одному пристрої • Умовні бали не є судовими платежами • Перед заняттям звіряйте завдання з актуальною редакцією ГПК</footer></div><script>
 const $=s=>document.querySelector(s), app=$('#app');let room=new URLSearchParams(location.search).get('room')?.toUpperCase()||'',token='',state=null,err='',joined=false,loading=false;const storageKey=r=>'game_v2_'+r;let lastVote='';
 const e=s=>String(s??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
@@ -349,12 +430,22 @@ const art=[
 '<path d="M17 3L30 8v11c0 10-8 15-13 19C12 34 4 29 4 19V8zM12 19l4 4 7-9"/>'];
 return '<span class="glass-pawn"><svg viewBox="0 0 36 43" aria-hidden="true">'+(art[i%art.length]||art[0])+'</svg></span>'}
 function teamHud(){return state.teams.slice(0,4).map((t,i)=>'<div class="team-hud hud-'+i+' '+(state.phase!=='lobby'&&state.turn===i?'current':'')+'"><div class="hud-row"><span class="hud-figure">'+(i===0?'⚖':i===1?'▤':i===2?'⚒':'♟')+'</span><div><div class="hud-name">'+e(t.name)+'</div><div class="hud-meta">◈ '+(t.capital??500)+' ПК · '+t.points+' балів</div></div></div></div>').join('')}
-function board(){let tiles='';for(let i=0;i<40;i++){let x,y;if(i<=10){x=10-i;y=10}else if(i<=20){x=0;y=10-(i-10)}else if(i<=30){x=i-20;y=0}else{x=10;y=i-30}
-const rawX=600+(x-y)*46,rawY=90+(x+y)*29.5;const px=rawX/1200*100,py=rawY/790*100;const pawnX=50+(600-rawX)*.14, pawnY=40+(385-rawY)*.18;
-const activeIndex=state.turn;const owner=state.ownership?.[i],isHazard=[12,19,25].includes(i),isSpecial=special(i);let tokens=state.teams.map((t,j)=>t.position===i?'<span class="token" style="--team:'+t.color+'" title="'+e(t.name)+'">'+tokenFigure(j)+'</span>':'').join('');
-tiles+='<div class="cell '+(isSpecial?'special ':'')+(isHazard?'hazard ':'')+(owner!==undefined?'owned':'')+'" tabindex="0" role="button" data-cell="'+i+'" title="Клітинка '+i+': '+e(label(i))+'" style="--px:'+px+'%;--py:'+py+'%;--pawn-left:'+pawnX+'%;--pawn-top:'+pawnY+'%"><div class="tile-top"></div><div class="tile-contents"><span class="tile-icon">'+e(ICONS[i])+'</span><small>'+e(label(i))+'</small></div><div class="tokens">'+tokens+'</div>'+(owner!==undefined?'<span class="owned-mark">●</span>':'')+'<span class="number">'+i+'</span></div>'}
-const base='<svg class="isometric-base" viewBox="0 0 1200 790" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="boardPlate" x1="0" y1="0" x2=".8" y2="1"><stop offset="0" stop-color="#25806a"/><stop offset=".5" stop-color="#0b4337"/><stop offset="1" stop-color="#052821"/></linearGradient><linearGradient id="goldOuter" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe99c"/><stop offset=".6" stop-color="#bf8c35"/><stop offset="1" stop-color="#63491e"/></linearGradient></defs><path d="M140 385L600 90 1060 385 600 680 140 385V418L600 720 1060 418V385" fill="#064538" stroke="#a0772c" stroke-width="9"/><path d="M140 385L600 90 1060 385 600 680Z" fill="url(#boardPlate)" stroke="url(#goldOuter)" stroke-width="16"/><path d="M232 385L600 155 968 385 600 614Z" fill="#06352b" stroke="#b88a3d" stroke-width="3"/><path d="M285 385L600 192 915 385 600 578Z" fill="#0b4235" stroke="#e1bb60" stroke-width="1.5" opacity=".9"/><path d="M140 418L600 720 1060 418" fill="none" stroke="#e1b758" stroke-width="8"/></svg>';
-return '<section class="game-stage"><div class="stage-header"><span class="pill">РАУНД '+(state.round+1)+' / '+state.settings.maxRounds+'</span><span class="pill">⚖ Судова стратегія</span></div><div class="board">'+base+tiles+'<div class="centerboard"><div class="crystal-court"><div class="roof"></div><div class="pillars"><i></i><i></i><i></i><i></i></div><div class="base"></div></div><h2>ГОСПОДАРСЬКА<br>МОНОПОЛІЯ</h2><p>ПРАВО · РИЗИК · СТРАТЕГІЯ</p><div style="margin:0">'+diceVisual(state.dice||[1,1])+'</div><div class="hint">Капітал · Практики · Процесуальні виклики</div></div>'+teamHud()+'<div class="stage-action-dock" id="stageActionDock"></div></div></section>'}
+
+function board(){
+let tiles='';
+for(let i=0;i<40;i++){
+ let x,y;
+ if(i<=10){x=10-i;y=10}
+ else if(i<=20){x=0;y=10-(i-10)}
+ else if(i<=30){x=i-20;y=0}
+ else{x=10;y=i-30}
+ const px=7+8.6*x,py=8+8.4*y,owner=state.ownership?.[i],isHazard=[12,19,25].includes(i),isSpecial=special(i);
+ const tokens=state.teams.map((t,j)=>t.position===i?'<span class="token" style="--team:'+t.color+'" title="'+e(t.name)+'">'+tokenFigure(j)+'</span>':'').join('');
+ tiles+='<div class="cell '+(isSpecial?'special ':'')+(isHazard?'hazard ':'')+(owner!==undefined?'owned':'')+'" tabindex="0" role="button" data-cell="'+i+'" title="Клітинка '+i+': '+e(label(i))+'" style="--px:'+px+'%;--py:'+py+'%;--pawn-left:50%;--pawn-top:13%"><div class="tile-top"></div><div class="tile-contents"><span class="tile-icon">'+e(ICONS[i])+'</span><small>'+e(label(i))+'</small></div><div class="tokens">'+tokens+'</div>'+(owner!==undefined?'<span class="owned-mark">●</span>':'')+'<span class="number">'+i+'</span></div>';
+}
+const base='<svg class="isometric-base rectangular-base" viewBox="0 0 1200 790" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="rectBoardSurface" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#195746"/><stop offset=".46" stop-color="#0a382e"/><stop offset="1" stop-color="#073026"/></linearGradient><linearGradient id="rectGoldFrame" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffeba0"/><stop offset=".4" stop-color="#e4b751"/><stop offset="1" stop-color="#8b5f24"/></linearGradient></defs><rect x="28" y="36" width="1144" height="717" rx="24" fill="#062d25" stroke="#674b23" stroke-width="15"/><rect x="28" y="24" width="1144" height="704" rx="23" fill="url(#rectBoardSurface)" stroke="url(#rectGoldFrame)" stroke-width="12"/><rect x="176" y="135" width="848" height="487" rx="20" fill="#07362c" stroke="#bd984f" stroke-width="3"/><rect x="193" y="151" width="814" height="455" rx="16" fill="none" stroke="#ffde8754" stroke-width="1.5"/></svg>';
+return '<section class="game-stage"><div class="stage-header"><span class="pill">РАУНД '+(state.round+1)+' / '+state.settings.maxRounds+'</span><span class="pill">⚖ Судова стратегія</span></div><div class="board">'+base+tiles+'<div class="centerboard"><div class="crystal-court"><div class="roof"></div><div class="pillars"><i></i><i></i><i></i><i></i></div><div class="base"></div></div><h2>ГОСПОДАРСЬКА<br>МОНОПОЛІЯ</h2><p>ПРАВО · РИЗИК · СТРАТЕГІЯ</p><div style="margin:0">'+diceVisual(state.dice||[1,1])+'</div><div class="hint">Капітал · Практики · Процесуальні виклики</div></div>'+teamHud()+'<div class="stage-action-dock" id="stageActionDock"></div></div></section>';
+}
 function teamCards(){return '<div class="teams">'+state.teams.map((t,i)=>'<div class="team '+(state.phase!=='lobby'&&state.turn===i?'active':'')+'"><div class="teamtop"><span class="team-badge" style="--team:'+t.color+'"><span class="token-symbol">'+e(t.symbol||'⚖️')+'</span></span><b>'+e(t.name)+'</b></div><div class="score">'+t.points+' <small style="font-size:12px">балів</small></div><div class="economy-stats"><span class="econ-chip">◈ '+(t.capital??500)+' ПК</span><span class="econ-chip">🏛 '+(t.purchased?.length??0)+'</span><span class="econ-chip">⚔ '+(t.cards??1)+'</span><span class="econ-chip">↻ '+(t.laps??0)+'</span></div><div class="hint">Учасників: '+state.players.filter(p=>p.team===i).length+' · Позиція: '+t.position+'</div></div>').join('')+'</div>'}
 function question(){let q=state.question;if(!q)return '';let active=state.phase==='voting';let isMyTeam=state.you?.team===state.turn;let answers=q.options.map((a,i)=>`<button class="option ${q.answered&&q.yourVote===i?'picked':''} ${state.phase==='result'&&i===q.answer?'right':''} ${state.phase==='result'&&q.yourVote===i&&i!==q.answer?'wrong':''}" ${active&&(isMyTeam||state.host)&&!q.answered?'': 'disabled'} data-vote="${i}"><b>${'АБВГ'[i]}.</b> ${e(a)} ${state.phase==='result'?`<span style="float:right">${q.votes?.[i]||0}</span>`:''}</button>`).join('');return `<div class="panel question"><div class="headerline"><span class="pill">${e(q.category)}</span><span class="hint">Голосів: ${q.count} / ${q.eligible}</span></div><h3>${e(q.text)}</h3>${answers}${active?`<p class="hint">${state.host?'Деморежим: оберіть відповідь від імені команди. Потім натисніть «Завершити голосування».':isMyTeam?(q.answered?'Ваш голос зараховано. Очікуйте результату.':'Оберіть відповідь зі свого пристрою.'):'Голосує команда «'+e(state.teams[state.turn].name)+'». Очікуйте.'}</p>`:''}${state.phase==='result'?`<div class="notice"><b>Правильна відповідь: ${'АБВГ'[q.answer]}</b><p>${e(q.explanation)}</p><div class="source-links"><a target="_blank" rel="noopener" href="https://zakon.rada.gov.ua/laws/show/1798-12#Text">Норми ГПК: ${e(q.article)}</a> <a target="_blank" rel="noopener" href="${e(q.source||'https://supreme.court.gov.ua/')}">${(q.source||'').includes('/Review/')?'Постанова Верховного Суду в ЄДРСР':'Офіційний матеріал Верховного Суду'}</a></div></div>`:''}</div>`}
 function main(){if(state)strategy();if(!state){let isJoining=false;const saved=state;state=makeState();state.teams.forEach((t,i)=>t.position=[0,10,20,30][i]??0);const boardPreview=board();state=saved;app.innerHTML=`<div class="landing-page"><div class="panel intro landing-intro"><div class="pill">Господарський процес • Командна стратегія</div><h1>Судовий процес стає грою.</h1><p>40 тематичних клітинок на основі ГПК та практики ВС, 3D-кубики, процесуальний капітал, юридичні практики, випадкові події та дуелі. У демоверсії 8 віртуальних учасників, тому можна почати одразу. Для справжнього підключення з різних телефонів потрібен окремий сервер.</p>${isJoining?`<h2>Долучитися до кімнати ${e(room)}</h2><label>Ім’я учасника</label><input id="name" maxlength="36" placeholder="Введіть ваше ім’я"><div class="actions"><button class="primary" id="join">Приєднатися</button><button class="secondary" id="back">На головну</button></div>`:`<div class="actions"><button class="primary" id="create">🎲 Почати демонстраційну гру</button><button id="joinExisting">Увійти за кодом</button></div><div id="joinArea" class="hidden"><label>Код кімнати</label><input id="code" maxlength="6" placeholder="Наприклад, X7K2QP"><button id="go">Перейти</button></div>`}<p class="error">${e(err)}</p></div>${boardPreview}</div>`;$('#create')?.addEventListener('click',async()=>{if(await api('create')){history.replaceState(null,'','?room='+room);main()}});$('#joinExisting')?.addEventListener('click',()=>$('#joinArea').classList.toggle('hidden'));$('#go')?.addEventListener('click',()=>{let c=$('#code').value.trim().toUpperCase();if(c){room=c;history.replaceState(null,'','?room='+room);main()}});$('#back')?.addEventListener('click',()=>{room='';history.replaceState(null,'',location.pathname);main()});$('#join')?.addEventListener('click',async()=>{if(await api('join',{name:$('#name').value})){joined=true;main()}});wireCells();return}
