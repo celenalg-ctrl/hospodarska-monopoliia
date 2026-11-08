@@ -411,6 +411,47 @@ text-shadow:none!important;cursor:pointer;transition:transform .15s,box-shadow .
 @media(max-width:1200px){.answer-indicator{font-size:9px}.game-shell .team-hud.current .hud-name{font-size:16px}}
 @media(max-width:720px){.game-shell .stage-header{height:auto;flex-basis:auto;margin-top:2px}.game-shell .stage-header .turn-header{font-size:9px}.rules-trigger{font-size:9px;padding:3px 6px}.game-shell .team-hud.current{transform:scale(1.04)}.game-shell .team-hud .whose-turn{font-size:7px;padding:1px 2px;white-space:normal}.answer-indicator{font-size:8px;padding:3px 4px}.game-shell .question .option{flex-wrap:wrap}.game-rules-box{padding:15px}}
 @media(prefers-reduced-motion:reduce){.game-shell .team-hud.current{animation:none}}
+</style><style id="subtle-legal-links-v11">
+/* Компактні посилання на норми та практику: без великих суцільних золотих блоків */
+.game-shell .question .source-links,.game-shell .answer-result .source-links,.game-shell .notice .source-links{
+ display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-start;gap:9px;margin:15px 0 2px
+}
+.game-shell .question .source-links a,
+.game-shell .answer-result .source-links a,
+.game-shell .notice .source-links a{
+ display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:7px!important;
+ width:auto!important;max-width:100%!important;min-height:34px!important;
+ padding:7px 12px!important;
+ font:700 12px/1.4 Manrope,system-ui,sans-serif!important;
+ color:#ffe6a5!important;
+ background:linear-gradient(125deg,#174d3ecc,#0c3a31df)!important;
+ border:1px solid #d9b768!important;border-radius:9px!important;
+ text-decoration:none!important;text-shadow:none!important;
+ box-shadow:inset 0 1px #fff2,0 2px 6px #0003!important;
+ opacity:1!important;filter:none!important;transform:none!important;
+ transition:background .16s,box-shadow .16s,filter .16s!important;
+}
+.game-shell .question .source-links a::after,
+.game-shell .answer-result .source-links a::after,
+.game-shell .notice .source-links a::after{
+ content:"↗";font-size:15px!important;font-weight:700!important;line-height:1!important;
+ color:#f4d487!important
+}
+.game-shell .question .source-links a:hover,
+.game-shell .answer-result .source-links a:hover,
+.game-shell .notice .source-links a:hover{
+ background:linear-gradient(125deg,#246a55,#165443)!important;
+ border-color:#ffe5a2!important;filter:brightness(1.1)!important;
+ box-shadow:0 0 0 2px #ecc56935,0 3px 9px #0004!important;transform:none!important
+}
+.game-shell .question .source-links a:focus-visible,
+.game-shell .answer-result .source-links a:focus-visible,
+.game-shell .notice .source-links a:focus-visible{outline:2px solid #ffe4a0!important;outline-offset:3px}
+@media(max-width:720px){
+ .game-shell .question .source-links a,
+ .game-shell .answer-result .source-links a,
+ .game-shell .notice .source-links a{width:auto!important;max-width:100%!important;font-size:11px!important;min-height:32px!important;padding:6px 10px!important}
+}
 </style></head><body><div class="wrap"><header class="top"><div><div class="sub">Інтерактивна юридична стратегія • демоверсія</div><div class="brand">⚖ ГОСПОДАРСЬКА <span>МОНОПОЛІЯ</span></div></div><div class="pill" id="roomLabel">Навчальна гра • ГПК України</div></header><div id="app"></div><footer class="foot">Демонстраційний режим на одному пристрої • Умовні бали не є судовими платежами • Перед заняттям звіряйте завдання з актуальною редакцією ГПК</footer></div><script>
 const $=s=>document.querySelector(s), app=$('#app');let room=new URLSearchParams(location.search).get('room')?.toUpperCase()||'',token='',state=null,err='',joined=false,loading=false;const storageKey=r=>'game_v2_'+r;let lastVote='';
 const e=s=>String(s??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
