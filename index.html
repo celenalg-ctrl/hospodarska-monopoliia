@@ -588,11 +588,12 @@ function nextScenario(cell){
  const last=state.lastQuestionByCell[cell];
  let available=pool.filter(q=>!history.includes(q.text)&&q.text!==last);
  if(!available.length){
-  // Перш ніж повторити питання на цій клітинці, шукаємо невикористаний казус у всьому банку.
-  available=bank.filter(q=>!history.includes(q.text)&&q.text!==last);
+  // Після вичерпання нових варіантів повторно використовуємо лише споріднену процесуальну тему, виключаючи останнє запитання цієї клітинки.
+  available=pool.filter(q=>q.text!==last);
  }
  if(!available.length){
-  available=pool.filter(q=>q.text!==last);
+  // Захист від повтору однакового тексту, якщо тематичний банк випадково містить лише одне завдання.
+  available=bank.filter(q=>q.text!==last&&!history.includes(q.text));
  }
  if(!available.length)available=pool;
  if(!available.length)throw Error('Для цієї клітинки немає жодного процесуального завдання');
