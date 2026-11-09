@@ -511,7 +511,32 @@ text-shadow:none!important;cursor:pointer;transition:transform .15s,box-shadow .
 .final-ranking-row small{grid-column:1/-1;color:#c4d9c9}
 @media(max-width:1050px){.portfolio-grid{grid-template-columns:1fr}.game-stage .board .cell .tile-price,.game-stage .board .cell .owner-flag{font-size:7px!important;padding:1px 2px}}
 @media(max-width:720px){.portfolio-grid{grid-template-columns:1fr 1fr}.game-stage .board .cell .tile-price,.game-stage .board .cell .owner-flag{font-size:5px!important;padding:0 1px;border-radius:2px;bottom:-3px!important}.asset-offer{padding:10px}}
-</style><style id="assets-visible-shortcut-v13">.game-shell .stage-header .assets-trigger{background:linear-gradient(130deg,#ffe7a2,#d8a34d)!important;color:#183b30!important;border-color:#fff1be!important;box-shadow:0 2px 10px #e6ba534c}.game-shell .stage-header .assets-trigger:hover{filter:brightness(1.08)}.asset-modal-box{max-width:780px}.asset-modal-box .asset-portfolio{margin-top:13px}.asset-modal-box .portfolio-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.asset-details-inline{margin:10px 0;border-top:1px solid #b4a16c;padding-top:10px}@media(max-width:720px){.game-shell .stage-header .assets-trigger{font-size:9px}.asset-modal-box .portfolio-grid{grid-template-columns:1fr}}</style><style id="case-reference-line-v15">.game-shell .case-reference-line{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:12px 0}.game-shell .case-reference-line span{font-size:11px;line-height:1.4;border:1px solid #b6a36f;border-radius:6px;padding:4px 7px;background:#0a352c;color:#ffe4ac;font-weight:700}.game-shell .case-reference-line span:first-child{max-width:100%;overflow-wrap:anywhere}</style></head><body><div class="wrap"><header class="top"><div><div class="sub">Інтерактивна юридична стратегія • демоверсія</div><div class="brand">⚖ ГОСПОДАРСЬКА <span>МОНОПОЛІЯ</span></div></div><div class="pill" id="roomLabel">Навчальна гра • ГПК України</div></header><div id="app"></div><footer class="foot">Демонстраційний режим на одному пристрої • Умовні бали не є судовими платежами • Перед заняттям звіряйте завдання з актуальною редакцією ГПК</footer></div><script>
+</style><style id="assets-visible-shortcut-v13">.game-shell .stage-header .assets-trigger{background:linear-gradient(130deg,#ffe7a2,#d8a34d)!important;color:#183b30!important;border-color:#fff1be!important;box-shadow:0 2px 10px #e6ba534c}.game-shell .stage-header .assets-trigger:hover{filter:brightness(1.08)}.asset-modal-box{max-width:780px}.asset-modal-box .asset-portfolio{margin-top:13px}.asset-modal-box .portfolio-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.asset-details-inline{margin:10px 0;border-top:1px solid #b4a16c;padding-top:10px}@media(max-width:720px){.game-shell .stage-header .assets-trigger{font-size:9px}.asset-modal-box .portfolio-grid{grid-template-columns:1fr}}</style><style id="case-reference-line-v15">.game-shell .case-reference-line{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:12px 0}.game-shell .case-reference-line span{font-size:11px;line-height:1.4;border:1px solid #b6a36f;border-radius:6px;padding:4px 7px;background:#0a352c;color:#ffe4ac;font-weight:700}.game-shell .case-reference-line span:first-child{max-width:100%;overflow-wrap:anywhere}</style><style id="hud-name-no-wrap-v16">
+/* Імена команд не розриваються на окремі літери, зокрема «Прецедент». */
+.game-stage .team-hud .hud-row{display:flex;align-items:center;gap:clamp(5px,.65vw,9px);min-width:0}
+.game-stage .team-hud .hud-row>div{min-width:0;flex:1 1 auto}
+.game-stage .team-hud .hud-figure{flex:0 0 auto;font-size:clamp(21px,2.35vw,35px)}
+.game-stage .team-hud .hud-name,
+.game-shell .game-stage .team-hud.current .hud-name{
+ display:block;white-space:nowrap!important;word-break:keep-all!important;
+ overflow-wrap:normal!important;hyphens:none!important;
+ font-size:clamp(14px,1.32vw,22px)!important;
+ line-height:1.08!important;letter-spacing:-.025em!important;
+ max-width:100%;overflow:visible;text-overflow:clip;
+}
+.game-stage .team-hud.current .hud-row>div{min-width:0}
+@media(max-width:1200px){
+ .game-shell .game-stage .team-hud.current .hud-name,
+ .game-stage .team-hud .hud-name{font-size:clamp(12px,1.4vw,17px)!important}
+ .game-stage .team-hud .hud-figure{font-size:clamp(19px,2.2vw,29px)}
+}
+@media(max-width:720px){
+ .game-shell .game-stage .team-hud.current .hud-name,
+ .game-stage .team-hud .hud-name{font-size:clamp(9px,2.2vw,13px)!important;letter-spacing:-.045em!important}
+ .game-stage .team-hud .hud-figure{font-size:clamp(14px,3vw,22px)}
+ .game-stage .team-hud .hud-row{gap:3px}
+}
+</style></head><body><div class="wrap"><header class="top"><div><div class="sub">Інтерактивна юридична стратегія • демоверсія</div><div class="brand">⚖ ГОСПОДАРСЬКА <span>МОНОПОЛІЯ</span></div></div><div class="pill" id="roomLabel">Навчальна гра • ГПК України</div></header><div id="app"></div><footer class="foot">Демонстраційний режим на одному пристрої • Умовні бали не є судовими платежами • Перед заняттям звіряйте завдання з актуальною редакцією ГПК</footer></div><script>
 const $=s=>document.querySelector(s), app=$('#app');let room=new URLSearchParams(location.search).get('room')?.toUpperCase()||'',token='',state=null,err='',joined=false,loading=false;const storageKey=r=>'game_v2_'+r;let lastVote='';
 const e=s=>String(s??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 
